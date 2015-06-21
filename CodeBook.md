@@ -49,8 +49,8 @@ X_train.txt | text file without headers, containing 561-element feature vector f
 * Resulting data set contains additional grouping variable "Group" (set to "training") as well as subject and activity ID
 
 ##### Reading of data related to test data set.
-* Tht three files have the same structure and content as the data for training data.
-* AThe difference lies in the number of observations (2947 observations for each file) as well as file and folder names.
+* The three files have the same structure and content as the data for training data.
+* The difference lies in the number of observations (2947 observations for each file) as well as file and folder names.
 * All three following files are stored in folder "UCI HAR Dataset/test/" in the unzipped original data.
 
 File | Description |Comment | R data frame
@@ -108,7 +108,7 @@ with the date replaced by the date of creation.
 ### Description of the variables in the tidy data txt file
 
 The final tidy data set is stored as a tab-separated txt fie in the foder "UCI HAR tidy data". The dimension of
-the corresponding data frame "tidyFinal" created by the script [run_anaysis.R](run_anaysis.R) is 2370 rows by 9 columns.
+the corresponding data frame "tidyFinal" created by the script [run_analysis.R](run_analysis.R) is 2370 rows by 9 columns.
 
 The 2370 rows contain average values of 79 different features for 30 subjects (30 x 79 = 2370). The 9 columns
 are 3 descriptor variables and 6 numeric columns containing the averages for the 6 different activities as
