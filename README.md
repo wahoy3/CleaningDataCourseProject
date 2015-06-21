@@ -6,14 +6,16 @@ Course project is on activity data taken from the accelerometers of the Samsung 
 A full description is available at [the original 
 site](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones).
 This README file references the original data, gives a brief description of the original data files, and gives
-a summary of what has been done for the course project of the Coursera course "Getting andn Cleaning Data".
+a summary of what has been done for the course project of the Coursera course "Getting and Cleaning Data".
 
 #### Files
-In addition to the readme file this repository contains
+This repository contains
 
  * this README file describing the overall structure of the repo, the files, the data origin, etc.
  * an [R script](run_analysis.R) which reads the data if it is stored in the same directory in which the original zipped data set has been extracted
  * a [code book](CodeBook.md) describing the tidy data set with all its columns, as well as the steps to get there.
+ * the [feature list](featureList.md) describing the 79 features which are summarized.
+ * the final tidy data set **tidy data 2015-06-22.txt**
 
 #### Structure of original data
 
