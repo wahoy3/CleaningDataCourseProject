@@ -12,6 +12,7 @@
 # Author: Walter Hoyer
 # Last change: 2015-06-21
 #-------------------------------------------------------#
+rm(list=ls())
 setwd("UCI HAR Dataset")
 
 library(dplyr)
@@ -82,6 +83,6 @@ names(tidyFinal)[3] <- "Feature"
 setwd("..")
 if (!file.exists("UCI HAR tidy data")) dir.create("UCI HAR tidy data")
 setwd("UCI HAR tidy data")
-write.table(tidyFinal, file=paste0("tidy ",Sys.Date(),".txt"),
+write.table(tidyFinal, file=paste0("tidy data ",Sys.Date(),".txt"),
                               quote=FALSE, sep="\t", dec=".", row.names=FALSE)
 

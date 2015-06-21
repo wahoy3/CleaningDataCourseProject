@@ -4,21 +4,20 @@ author: Walter Hoyer
 date: 2015-06-21
 ---
  
-## Project Description
+### Project Description
 Course project using Samsung S accelerometer and gyroscope data
  
-##Study design and data processing
+### Study design and data processing
 
 For all details regarding the study itself, please refer to [README file](README.md) within the same repository.
  
-##Creating the tidy datafile
- 
-###Guide to create the tidy data file
+### Creating and storing the tidy datafile
+
 The tidy data file is created using the R-script `run_analysis.R` within this repository. 
-The following steps have been performed and are commented in the R code.
+The following steps have been performed and are largely commented also within the R code.
 
 #### Prerequisites
-#
+
 * The file has to be stored in the same folder as the folder `UCI HAR Dataset` unzipped from the
 [original data source](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip).
 * packages `dplyr` and `reshape2`need to be installed.
@@ -33,108 +32,101 @@ File | Description |Comment | R data frame
 features.txt  | text file without header, containing 561 different features with their feature ID | imported by `read.table`, assigning column headers "featID" and "Feature" | features
 activity_labels.txt | text file without header containing 6 activities with their activity ID  | imported by `read.table`, assigning column headers "ActID" and "Activity" | actLabels
 
-##### Reading off data related to training data set.
+##### Reading of data related to training data set
+
 * All three following files have 7352 observations.
 * All three following files are stored in folder "UCI HAR Dataset/train/" in the unzipped original data.
 
 File | Description |Comment | R data frame
 -----|-------------|--------|-------------
-subject_train.txt | text file without header, containing one subject ID per line. | imported by `read.table`, assigning column header "Subject" | trainSubj
-Y_train.txt | text file without header, containing one activity ID per line. | imported by `read.table`, assigning column header "ActID" | trainY
+subject_train.txt | text file without header, containing single column with one subject ID per line. | imported by `read.table`, assigning column header "Subject" | trainSubj
+Y_train.txt | text file without header, containing single column withone activity ID per line. | imported by `read.table`, assigning column header "ActID" | trainY
 X_train.txt | text file without headers, containing 561-element feature vector for each observation | imported by `read.table` with option `colClasses="numeric"` | trainX
 
 * All three files are combined into one data frame `train` via
-`train <- cbind(Group="training", trainSubj, trainY, trainX)`
+	`train <- cbind(Group="training", trainSubj, trainY, trainX)`
+* Resulting data set contains additional grouping variable "Group" (set to "training") as well as subject and activity ID
 
-##### Reading off data related to test data set.
-* Three files have the same structure and content as the data for training data
-* All three following files have 2947 observations.
+##### Reading of data related to test data set.
+* Tht three files have the same structure and content as the data for training data.
+* AThe difference lies in the number of observations (2947 observations for each file) as well as file and folder names.
 * All three following files are stored in folder "UCI HAR Dataset/test/" in the unzipped original data.
 
 File | Description |Comment | R data frame
 -----|-------------|--------|-------------
-subject_test.txt | text file without header, containing one subject ID per line. | imported by `read.table`, assigning column header "Subject" | testSubj
-Y_test.txt | text file without header, containing one activity ID per line. | imported by `read.table`, assigning column header "ActID" | testY
+subject_test.txt | text file without header, containing single column with one subject ID per line. | imported by `read.table`, assigning column header "Subject" | testSubj
+Y_test.txt | text file without header, containing single column with one activity ID per line. | imported by `read.table`, assigning column header "ActID" | testY
 X_test.txt | text file without headers, containing 561-element feature vector for each observation | imported by `read.table` with option `colClasses="numeric"` | testX
 
 * All three files are combined into one data frame `test` via
-`test <- cbind(Group="test", testSubj, testY, testX)`
+	`test <- cbind(Group="test", testSubj, testY, testX)`
+* Resulting data set contains additional grouping variable "Group" (set to "test") as well as subject and activity ID
 
+#### Reshaping data towards the tidy data set
 
+Test and training data are actually two parts of a larger data set; in the original experiment data had been collected on a number
+of 30 test persons, 21 of which have been used as training data set and the remaining 9 as test data set.
 
- * Combining test and training data set, merging by activity labels, sorting by subject ID
- * Subsetting data set to features which are mean or standard deviation of a measurement
- * Creating final tidy data of size 2370 x 9:
-	 - Unique key to each observation is contained in first 3 columns ´Subject´, ´Group´ (´training´ or ´test´) and ´Feature´
-	 - The remaining 6 columns contain the average across all available observations for each feature
- * Storing the final data in a separate folder ´UCI HAR tidy data´, including the date in the file name (e.g. ´tidy 1900-01-01.txt´
+ * Both parts are combined in a new data frame via `total <- rbind(test,train)`
+ * A new column with the activity labels (in plain English) is introduced by merging with the "actLabels" data set
+ via `total <- merge(actLabels,total, by="ActID")`
+ * The resulting data set is sorted by subject ID and stored as new data frame "totalSorted"
+ * The non-descriptive column names "V1" up to "V561" are replaced by the individual features via 
+	names(totalSorted)[5:565] <- as.character(features$Feature)
 
-Description on how to create the tidy data file (1. download the data, ...)/
- 
-###Cleaning of the data
-Short, high-level description of what the cleaning script does. [link to the readme document that describes the code in greater detail]()
- 
-##Description of the variables in the tiny_data.txt file
-General description of the file including:
- - Dimensions of the dataset
- - Summary of the data
- - Variables present in the dataset
- 
-(you can easily use Rcode for this, just load the dataset and provide the information directly form the tidy data file)
- 
-###Variable 1 (repeat this section for all variables in the dataset)
-Short description of what the variable describes.
- 
-Some information on the variable including:
- - Class of the variable
- - Unique values/levels of the variable
- - Unit of measurement (if no unit of measurement list this as well)
- - In case names follow some schema, describe how entries were constructed (for example time-body-gyroscope-z has 4 levels of descriptors. Describe these 4 levels). 
- 
-(you can easily use Rcode for this, just load the dataset and provide the information directly form the tidy data file)
- 
-####Notes on variable 1:
-If available, some additional notes on the variable not covered elsewehere. If no notes are present leave this section out.
- 
+##### Subsetting to desired columns
 
-#-------------------------------------------------------#
-#-------------------------------------------------------#
+Only columns containing means or standard deviations of measurements should be summarized in the final tidy data frame.
+Those column IDs are extracted via `grep` with the key words "mean" or "std",
 
-#---------------------------------------------------------
-# combining training and test data-set
-#---------------------------------------------------------
-total <- rbind(test,train)
-total <- merge(actLabels,total, by="ActID")
-totalSorted <- total[order(total$Subject),]
-
-names(totalSorted)[5:565] <- as.character(features$Feature)
-
-tidy <- totalSorted[,c(1:4,sort(c(grep("std",names(totalSorted)),
+	tidy <- totalSorted[,c(1:4,sort(c(grep("std",names(totalSorted)),
                     grep("mean", names(totalSorted)))))]
 
-tidyMelt <- melt(tidy, id=c("ActID", "Activity", "Subject", "Group"),
+Using melt and dcast the final tidy data frame is obtained via
+
+	tidyMelt <- melt(tidy, id=c("ActID", "Activity", "Subject", "Group"),
                     measure.vars=c(5:83))
 
-tidyFinal <- dcast(tidyMelt, formula = Subject + Group + variable ~ Activity,
+	tidyFinal <- dcast(tidyMelt, formula = Subject + Group + variable ~ Activity,
                     fun.aggregate=mean)
 
-names(tidyFinal)[3] <- "Feature"
+and the column "variable" is renamed to the more descriptive name "Feature".
 
-#---------------------------------------------------------
-# creating output directory and saving data
-#---------------------------------------------------------
-setwd("..")
-if (!file.exists("UCI HAR tidy data")) dir.create("UCI HAR tidy data")
-setwd("UCI HAR tidy data")
-write.table(tidyFinal, file=paste0("tidy ",Sys.Date(),".txt"),
-                              quote=FALSE, sep="\t", dec=".", row.names=FALSE)
+#### Storing final tidy data frame as txt file
 
+In the original folder in which the R script and the data folder "UCI HAR Dataset" are located, a new folder
+"UCI HAR tidy data" is created if it does not exist.
 
+In this folder the final data set is saved via the `write.table` command. The decimal separator is the "." and
+the columns are separated by a tabulator. The final txt file follows the naming convention **tidy 1900-01-01.txt**
+with the date replaced by the date of creation.
 
 
+### Description of the variables in the tidy data txt file
 
-##Sources
-Sources you used if any, otherise leave out.
- 
-##Annex
-If you used any code in the codebook that had the echo=FALSE attribute post this here (make sure you set the results parameter to 'hide' as you do not want the results to show again)
+The final tidy data set is stored as a tab-separated txt fie in the foder "UCI HAR tidy data". The dimension of
+the corresponding data frame "tidyFinal" created by the script [run_anaysis.R](run_anaysis.R) is 2370 rows by 9 columns.
+
+The 2370 rows contain average values of 79 different features for 30 subjects (30 x 79 = 2370). The 9 columns
+are 3 descriptor variables and 6 numeric column containing the averages for the 6 different activities as
+described in the table below.
+
+Column name | class | Comment
+------------|-------|--------
+Subject	| integer	| Subject ID randing from 1 to 30. Data frame is sorted by this ID.
+Group	| factor	| Two-level factor with levels "test" and "training" describing the assignment of the subject to the two groups.
+Feature	| factor	| Factor with 79 levels corresponding to those features which are mean or standard deviation of a measurement.
+LAYING	| numeric	| Average result for subject-feature combination while laying.
+SITTING	| numeric	| Average result for subject-feature combination while sitting.
+STANDING	| numeric	| Average result for subject-feature combination while standing.
+WALKING	| numeric	| Average result for subject-feature combination while walking.
+WALKING_DOWNSTAIRS	| numeric	| Average result for subject-feature combination while walking downstairs.
+WALKING_UPSTAIRS	| numeric	| Average result for subject-feature combination while walking upstairs.
+
+The 79 features corresponding to 
+
+
+### References
+The dataset has originally been published in the following publication [1] 
+
+[1] Davide Anguita, Alessandro Ghio, Luca Oneto, Xavier Parra and Jorge L. Reyes-Ortiz. A Public Domain Dataset for Human Activity Recognition Using Smartphones. 21th European Symposium on Artificial Neural Networks, Computational Intelligence and Machine Learning, ESANN 2013. Bruges, Belgium 24-26 April 2013. 
