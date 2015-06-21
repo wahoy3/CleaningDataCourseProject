@@ -9,7 +9,7 @@ Course project using Samsung S accelerometer and gyroscope data
  
 ##Study design and data processing
 
-For all details please refer to [README file](README.md) within the same repository.
+For all details regarding the study itself, please refer to [README file](README.md) within the same repository.
  
 ##Creating the tidy datafile
  
@@ -30,8 +30,10 @@ Reading of meta data, i.e. feature list and activities by ID
 
 file | Description | Comment
 -----|-------------|---------
-features.txt  | text file without header, containing 561 different features with their feature ID | imported by `read.table`, assigning column headers "featID" and "Feature"
-activity_labels.txt | text file without header containing 6 activities with their activity ID  | imported by `read.table`, assigning column headers "ActID" and "Activity"
+features.txt  | text file without header, containing 561 different features with their feature ID |
+	imported by `read.table`, assigning column headers "featID" and "Feature"
+activity_labels.txt | text file without header containing 6 activities with their activity ID  |
+	imported by `read.table`, assigning column headers "ActID" and "Activity"
 
 
 
