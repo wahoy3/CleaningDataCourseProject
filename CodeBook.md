@@ -5,7 +5,7 @@ date: 2015-06-21
 ---
  
 ### Project Description
-Course project using Samsung S accelerometer and gyroscope data
+Course project using Samsung S accelerometer and gyroscope data (reference **[1]** below)
  
 ### Study design and data processing
 
@@ -13,8 +13,8 @@ For all details regarding the study itself, please refer to [README file](README
  
 ### Creating and storing the tidy datafile
 
-The tidy data file is created using the R-script `run_analysis.R` within this repository. 
-The following steps have been performed and are largely commented also within the R code.
+The tidy data file is created using the R-script [run_analysis.R](run_analysis.R) within this repository. 
+The following steps have been performed by and are largely commented within the R code.
 
 #### Prerequisites
 
@@ -44,6 +44,7 @@ Y_train.txt | text file without header, containing single column withone activit
 X_train.txt | text file without headers, containing 561-element feature vector for each observation | imported by `read.table` with option `colClasses="numeric"` | trainX
 
 * All three files are combined into one data frame `train` via
+
 	`train <- cbind(Group="training", trainSubj, trainY, trainX)`
 * Resulting data set contains additional grouping variable "Group" (set to "training") as well as subject and activity ID
 
@@ -59,6 +60,7 @@ Y_test.txt | text file without header, containing single column with one activit
 X_test.txt | text file without headers, containing 561-element feature vector for each observation | imported by `read.table` with option `colClasses="numeric"` | testX
 
 * All three files are combined into one data frame `test` via
+
 	`test <- cbind(Group="test", testSubj, testY, testX)`
 * Resulting data set contains additional grouping variable "Group" (set to "test") as well as subject and activity ID
 
@@ -72,6 +74,7 @@ of 30 test persons, 21 of which have been used as training data set and the rema
  via `total <- merge(actLabels,total, by="ActID")`
  * The resulting data set is sorted by subject ID and stored as new data frame "totalSorted"
  * The non-descriptive column names "V1" up to "V561" are replaced by the individual features via 
+
 	names(totalSorted)[5:565] <- as.character(features$Feature)
 
 ##### Subsetting to desired columns
@@ -98,7 +101,7 @@ In the original folder in which the R script and the data folder "UCI HAR Datase
 "UCI HAR tidy data" is created if it does not exist.
 
 In this folder the final data set is saved via the `write.table` command. The decimal separator is the "." and
-the columns are separated by a tabulator. The final txt file follows the naming convention **tidy 1900-01-01.txt**
+the columns are separated by a tabulator. The final txt file follows the naming convention **tidy data 1900-01-01.txt**
 with the date replaced by the date of creation.
 
 
@@ -108,7 +111,7 @@ The final tidy data set is stored as a tab-separated txt fie in the foder "UCI H
 the corresponding data frame "tidyFinal" created by the script [run_anaysis.R](run_anaysis.R) is 2370 rows by 9 columns.
 
 The 2370 rows contain average values of 79 different features for 30 subjects (30 x 79 = 2370). The 9 columns
-are 3 descriptor variables and 6 numeric column containing the averages for the 6 different activities as
+are 3 descriptor variables and 6 numeric columns containing the averages for the 6 different activities as
 described in the table below.
 
 Column name | class | Comment
@@ -123,7 +126,8 @@ WALKING	| numeric	| Average result for subject-feature combination while walking
 WALKING_DOWNSTAIRS	| numeric	| Average result for subject-feature combination while walking downstairs.
 WALKING_UPSTAIRS	| numeric	| Average result for subject-feature combination while walking upstairs.
 
-The 79 features corresponding to 
+The 79 (out of the total 561) features corresponding to means and standard deviations of measurements are listed in the
+file [featureList.md](featureList.md) also contained in this repository.
 
 
 ### References
