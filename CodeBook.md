@@ -14,8 +14,37 @@ For all details please refer to [README file](README.md) within the same reposit
 ##Creating the tidy datafile
  
 ###Guide to create the tidy data file
-The tidy data file is created using the R-script `run_analysis.R` within this repository. The file has to be
-stored in the same folder as the folder `UCL HAR data` unzipped from the data source.
+The tidy data file is created using the R-script `run_analysis.R` within this repository. 
+The following steps have been performed and are commented in the R code.
+
+#### Prerequisites
+#
+* The file has to be stored in the same folder as the folder `UCI HAR Dataset` unzipped from the
+[original data source](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip).
+* packages `dplyr` and `reshape2`need to be installed.
+
+
+#### Reading data
+
+Reading of meta data, i.e. feature list and activities by ID
+
+file | Description | Comment
+-----|-------------|---------
+features.txt  | text file without header, containing 561 different features with their feature ID | imported by `read.table`, assigning column headers "featID" and "Feature"
+activity_labels.txt | text file without header containing 6 activities with their activity ID  | imported by `read.table`, assigning column headers "ActID" and "Activity"
+
+
+
+
+
+	 - data frame with feature vectors
+ * Reading of test data, structured as before
+ * Combining test and training data set, merging by activity labels, sorting by subject ID
+ * Subsetting data set to features which are mean or standard deviation of a measurement
+ * Creating final tidy data of size 2370 x 9:
+	 - Unique key to each observation is contained in first 3 columns ´Subject´, ´Group´ (´training´ or ´test´) and ´Feature´
+	 - The remaining 6 columns contain the average across all available observations for each feature
+ * Storing the final data in a separate folder ´UCI HAR tidy data´, including the date in the file name (e.g. ´tidy 1900-01-01.txt´
 
 Description on how to create the tidy data file (1. download the data, ...)/
  
@@ -46,32 +75,7 @@ If available, some additional notes on the variable not covered elsewehere. If n
  
 
 #-------------------------------------------------------#
-# Script for course project on Coursera course "Getting
-# and cleaning data", producing tidy data set with
-# averages across certain features by subject and
-# activity
 #-------------------------------------------------------#
-# This script needs to be stored in a folder together
-# with the unzipped original data. In particular, the
-# folder "UCI HAR Dataset" and the script need to be
-# in the same folder.
-#-------------------------------------------------------#
-# Author: Walter Hoyer
-# Last change: 2015-06-21
-#-------------------------------------------------------#
-setwd("UCI HAR Dataset")
-
-library(dplyr)
-library(reshape2)
-#---------------------------------------------------------
-# Reading feature list and activity labels
-#---------------------------------------------------------
-# 561 features extracted from raw data
-features <- read.table("features.txt", stringsAsFactors=FALSE,
-                      col.names=c("featID", "Feature"))
-# six activity labels with legend
-actLabels <- read.table("activity_labels.txt", stringsAsFactors=FALSE,
-                        col.names=c("ActID","Activity"))
 
 #---------------------------------------------------------
 # Reading feature list and activity labels
