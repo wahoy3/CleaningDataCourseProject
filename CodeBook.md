@@ -26,21 +26,42 @@ The following steps have been performed and are commented in the R code.
 
 #### Reading data
 
-Reading of meta data, i.e. feature list and activities by ID
+##### Reading of meta data, i.e. feature list and activities by ID
 
-file | Description | Comment
------|-------------|---------
-features.txt  | text file without header, containing 561 different features with their feature ID |
-	imported by `read.table`, assigning column headers "featID" and "Feature"
-activity_labels.txt | text file without header containing 6 activities with their activity ID  |
-	imported by `read.table`, assigning column headers "ActID" and "Activity"
+File | Description |Comment | R data frame
+-----|-------------|--------|-------------
+features.txt  | text file without header, containing 561 different features with their feature ID | imported by `read.table`, assigning column headers "featID" and "Feature" | features
+activity_labels.txt | text file without header containing 6 activities with their activity ID  | imported by `read.table`, assigning column headers "ActID" and "Activity" | actLabels
+
+##### Reading off data related to training data set.
+* All three following files have 7352 observations.
+* All three following files are stored in folder "UCI HAR Dataset/train/" in the unzipped original data.
+
+File | Description |Comment | R data frame
+-----|-------------|--------|-------------
+subject_train.txt | text file without header, containing one subject ID per line. | imported by `read.table`, assigning column header "Subject" | trainSubj
+Y_train.txt | text file without header, containing one activity ID per line. | imported by `read.table`, assigning column header "ActID" | trainY
+X_train.txt | text file without headers, containing 561-element feature vector for each observation | imported by `read.table` with option `colClasses="numeric"` | trainX
+
+* All three files are combined into one data frame `train` via
+`train <- cbind(Group="training", trainSubj, trainY, trainX)`
+
+##### Reading off data related to test data set.
+* Three files have the same structure and content as the data for training data
+* All three following files have 2947 observations.
+* All three following files are stored in folder "UCI HAR Dataset/test/" in the unzipped original data.
+
+File | Description |Comment | R data frame
+-----|-------------|--------|-------------
+subject_test.txt | text file without header, containing one subject ID per line. | imported by `read.table`, assigning column header "Subject" | testSubj
+Y_test.txt | text file without header, containing one activity ID per line. | imported by `read.table`, assigning column header "ActID" | testY
+X_test.txt | text file without headers, containing 561-element feature vector for each observation | imported by `read.table` with option `colClasses="numeric"` | testX
+
+* All three files are combined into one data frame `test` via
+`test <- cbind(Group="test", testSubj, testY, testX)`
 
 
 
-
-
-	 - data frame with feature vectors
- * Reading of test data, structured as before
  * Combining test and training data set, merging by activity labels, sorting by subject ID
  * Subsetting data set to features which are mean or standard deviation of a measurement
  * Creating final tidy data of size 2370 x 9:
@@ -78,36 +99,6 @@ If available, some additional notes on the variable not covered elsewehere. If n
 
 #-------------------------------------------------------#
 #-------------------------------------------------------#
-
-#---------------------------------------------------------
-# Reading feature list and activity labels
-# for 7352 subjects in training group
-#---------------------------------------------------------
-# 7352 subjects performing the activities while being video-recorded
-trainSubj <- read.table("train/subject_train.txt", col.names="Subject")
-
-# vector with 7352 activities
-trainY <-  read.table("train/Y_train.txt", col.names="ActID")
-
-# 7352 rows (subjects) x 561 columns (derived results)
-trainX <-  read.table("train/X_train.txt",  colClasses="numeric")
-
-train <- cbind(Group="training", trainSubj, trainY, trainX)
-
-#---------------------------------------------------------
-# Reading feature list and activity labels
-# for 2947 subjects in test group
-#---------------------------------------------------------
-# 2947 subjects performing the activities while being video-recorded
-testSubj <- read.table("test/subject_test.txt", col.names="Subject")
-
-# vector with 2947 activities
-testY <-  read.table("test/Y_test.txt", col.names="ActID")
-
-# 2947 rows (subjects) x 561 columns (derived results)
-testX <-  read.table("test/X_test.txt", colClasses="numeric")
-
-test <- cbind(Group="test", testSubj, testY, testX)
 
 #---------------------------------------------------------
 # combining training and test data-set
