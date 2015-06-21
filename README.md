@@ -16,26 +16,47 @@ In addition to the readme file this repository contains
  * a code book describing the tidy data set with all its columns
 
 #### Structure of original data
-The original data folder already contains two kinds of data:
 
-1. The raw data from the accelerometer and gyroscopes, all txt files stored in the subfolder "Intertial signals"
+The original data has been captured on a number of 30 subjects who have been video taped while performing one of six activities. 
+The accelerometer and gyroscope data within their Samsung smart phone has been sampled and preprocessed as described in
+detail in the "README.txt" of the original data set. During the study the 30 subjects had been separated in two groups - a
+training and a test group. In the present exercise both groups are merged. 
+
+In summary, the original data folder already contains three types of data:
+
+1. Preprocessed raw data from the accelerometers and gyroscopes; those files are available for the train and test data.
+and stored in the subfolder subfolder 'Intertial signals' within the folders 'train' and "test", respectively. 
+Files are available for three dimensions labeled X, Y, and Z and are carry names such as 'total_acc_x_train.txt', 'body_acc_x_train.txt'
+and 'body_gyro_x_train.txt'.
+
 2. Derived data sets with a 561 feature vector extracted for each observation.
+	- 'train/X_train.txt': Training set with 7352 observations of a 561-element feature list.
+	- 'train/y_train.txt': Training labels with the actity ID for the 7352 observations.
+	- 'train/subject_train.txt': Training subject ID, linking the subject to each of the 7352 observations.
+	- 'test/X_test.txt': Test set with 2947 observations of a 561-element feature list.
+	- 'test/y_test.txt': Test labels with the actity ID for the 2947 observations.
+	- 'test/subject_test.txt': Test subject ID, linking the subject to each of the 2947 observations.
 
-A number of 30 subjects have been video taped while performing one of six activities. 
+3. Explanatory files
+	- 'README.txt'
+	- 'features_info.txt': Shows information about the variables used on the feature vector.
+	- 'features.txt': List of all features.
+	- 'activity_labels.txt': Links the class labels with their activity name.
 
 The present exercise treats the derived feature list as the new raw data, reading it into R and reshaping it into a 
-tidy data set which contains summary statistics, summarized over subject and activity. (This is possible since each 
-subject has performed each activity multiple times. In the original data set the individual observations are still
-kept separate.)
+tidy data set which contains summary statistics, summarized over subject and activity. (This is possible since data from
+each subject has been split into several time windows such that multiple observations are available for each subject-activity 
+combination. In the original data set those individual samples are kept separate.)
 
-During the original study the 30 subjects had been separated in two groups - a training and a test group. In the present
-exercise both groups are recombined. More specifically, there are two folders called "train" and "test" which contain 
-equally structured files. Both folders contain
+Within the original data, there are two folders called "train" and "test" which contain equally structured files, as described
+under point 2 above. The length of each of the three files is identical and corresponds to the number of observations in the
+respective group. There were 2947 observations from 9 subjects performing 6 activities for the test group, and 7352 observations
+from 21 subjects performing the same 6 activities in the training group. On average there were 57 individual observations (corresponding
+to one of the sampled time-windows) for each subject-activity combination.
 
-1. A 561-feature vector with time and frequency domain variables. 
-2. Its activity label. 
-3. An identifier of the subject who carried out the experiment.
 
-The length of each of the three files is identical and corresponds to the number of observations in the respective group. There
-were 2947 observations from 9 subjects performing 6 activities for the test group, and 7352 observations from 21 subjects performing
-the same 6 activities in the training group. On average there were 57 observations for each subject-activity combination.
+####Reference
+The dataset has originally been published in the following publication [1] 
+
+[1] Davide Anguita, Alessandro Ghio, Luca Oneto, Xavier Parra and Jorge L. Reyes-Ortiz. A Public Domain Dataset for Human Activity Recognition Using Smartphones. 21th European Symposium on Artificial Neural Networks, Computational Intelligence and Machine Learning, ESANN 2013. Bruges, Belgium 24-26 April 2013. 
+
